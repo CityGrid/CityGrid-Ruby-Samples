@@ -1,0 +1,249 @@
+<%
+require 'net/http' 
+
+qs = ENV['QUERY_STRING']
+qf={}
+for f in qs.split("&")
+	s = f.split("=")
+	qf[s[0]] = s[1]
+end
+
+id = URI.unescape(qf['id'])
+what = URI.unescape(qf['what'])
+where = URI.unescape(qf['where'])
+
+phone=''
+customer_only=''
+placement = ''
+all_results=''
+review_count=''
+i=''
+format='json'
+callback=''
+id_type='cs'
+
+cg = CityGridPlaces.new()
+pd = cg.placesdetail(id,id_type,phone,customer_only,all_results,review_count,placement,format,callback,i,Publisher_Code)
+				
+b = JSON.parse(pd)
+
+locations = b['locations'][0]
+
+public_id = locations['public_id']
+infousa_id = locations['infousa_id']
+reference_id = locations['reference_id']
+impression_id = locations['impression_id']
+name = locations['name']
+display_ad = locations['display_ad']
+teaser = locations['teaser']
+business_operation_status = locations['business_operation_status']
+
+years_in_business = locations['address']['years_in_business']
+last_update_time = locations['address']['last_update_time']
+
+city = locations['address']['city']
+state = locations['address']['state']
+street = locations['address']['street']
+postal_code = locations['address']['postal_code']
+
+cross_street = locations['address']['cross_street']
+latitude = locations['address']['latitude']
+longitude = locations['address']['longitude']
+
+display_phone = locations['contact_info']['display_phone']
+display_url = locations['contact_info']['display_url']
+
+
+customer_content = locations['customer_content']
+%>
+<p><strong>Atribution:</strong></p>
+<%
+customer_attribution_source = locations['customer_content']['customer_message']['attribution_source']
+if(customer_attribution_source != nil && customer_attribution_source != 0)
+	%>
+	<strong>Attribution Source:</strong> <%= customer_attribution_source %><br />
+	<%	
+end
+customer_attribution_text = locations['customer_content']['customer_message']['attribution_text']
+if(customer_attribution_text != nil && customer_attribution_text != 0)
+	%>
+	<strong>Attribution Text:</strong> <%= customer_attribution_text %><br />
+	<%	
+end
+customer_attribution_message = locations['customer_content']['customer_message']['value']
+if(customer_attribution_message != nil && customer_attribution_message != 0)
+	%>
+	<strong>Attribution Value:</strong> <%= customer_attribution_message %><br />
+	<%	
+end
+customer_message_url = locations['customer_content']['customer_message_url']
+if(customer_message_url != nil && customer_message_url != 0)
+	%>
+	<strong>Customer URL:</strong> <%= customer_message_url %><br />
+	<%	
+end
+%>
+
+<%
+offers = locations['offers']
+if(offers != nil && offers != 0 && offers.length > 0)
+	%>
+	<p><strong>Offers:</strong></p>
+	<ul>
+	<%	
+	offers.each do|offer|
+		%>
+		<li><strong><%=offer%></strong></li>
+		<%
+	end 
+	%>	
+	</ul>
+	<%
+end
+%>
+
+<%
+categories = locations['categories']
+if(categories != nil && categories != 0 && categories.length > 0)
+	%>
+	<br />
+	<p><strong>Categories:</strong></p>
+	<ul>
+	<%	
+	categories.each do|category|
+		%>
+		<li><strong><%=category['name']%></strong></li>
+		<%
+	end 
+	%>	
+	</ul>
+	<%
+end
+%>
+
+<%
+attributes = locations['attributes']
+if(attributes != nil && attributes != 0 && attributes.length > 0)
+	%>
+	<p><strong>Attributes:</strong></p>
+	<ul>
+	<%	
+	attributes.each do|attribute|
+		%>
+		<li><strong><%=attribute['name']%> - <%=attribute['value']%></strong></li>
+		<%
+	end 
+	%>	
+	</ul>
+	<%
+end
+%>
+
+<%
+tips = locations['tips']
+if(tips != nil && tips != 0 && tips.length > 0)
+	%>
+	<p><strong>Tips:</strong></p>
+	<ul>
+	<%	
+	tips.each do|tip|
+		%>
+		<li><strong><%=attribute['tip_name']%> - <%=attribute['tip_text']%></strong></li>
+		<%
+	end 
+	%>	
+	</ul>
+	<%
+end
+%>
+
+<%
+images = locations['images']
+if(images != nil && images != 0 && images.length > 0)
+	%>
+	<p><strong>Images:</strong></p>
+	<ul>
+	<%	
+	images.each do|image|
+
+		type = image['type']
+		height = image['height']
+		width = image['width']
+		image_url = image['image_url']
+		primary = image['primary']
+
+		%>
+		<li><strong><%=image_url%></strong></li>
+		<%
+	end 
+	%>	
+	</ul>
+	<%
+end
+%>
+
+<%
+editorials = locations['editorials']
+if(editorials != nil && editorials != 0 && editorials.length > 0)
+	%>
+	<p><strong>Editorials:</strong></p>
+	<ul>
+	<%	
+	editorials.each do|editorial|
+
+		attribution_source = editorial['attribution_source']
+		attribution_logo = editorial['attribution_logo']
+		editorial_review = editorial['editorial_review']
+		editorial_id = editorial['editorial_id']
+		editorial_url = editorial['editorial_url']
+		editorial_title = editorial['editorial_title']
+		editorial_author = editorial['editorial_author']
+
+		%>
+		<li><strong><%=editorial_title%> - <%=editorial_review%></strong></li>
+		<%
+	end 
+	%>	
+	</ul>
+	<%
+end
+%>
+
+<%
+review_info = locations['review_info']
+if(review_info != nil && review_info != 0 && review_info.length > 0)
+	
+	total_user_reviews = review_info['total_user_reviews']
+	total_user_reviews_shown = review_info['total_user_reviews_shown']
+	overall_review_rating = review_info['overall_review_rating']
+
+	reviews = review_info['reviews']
+
+	if(reviews != nil && reviews != 0 && reviews.length > 0)
+
+		%>
+		<p><strong>Reviews:</strong></p>
+		<ul>
+		<%	
+
+		reviews.each do|review|
+
+			attribution_source = review['attribution_source']
+			attribution_logo = review['attribution_logo']
+			attribution_text = review['attribution_text']
+			review_id = review['review_id']
+			review_url = review['review_url']
+			review_title = review['review_title']
+			review_author = review['review_author']
+			review_text = review['review_text']
+
+			%>
+			<li><%= review_title %></a></li>
+			<%
+		end 	
+	end
+	%>	
+	</ul>
+	<%
+end
+%>

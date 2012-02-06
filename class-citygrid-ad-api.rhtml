@@ -1,0 +1,45 @@
+<%
+class CityGridAdvertising
+
+	def initialize()
+
+	end
+  	 
+ 	def displaywebad300x250(adid,publisher,what,where)
+
+		@returnAd = '<div id="sidebar_ad_slot_' + adid + '"></div>' + "\n"
+		@returnAd = @returnAd + '<script type="text/javascript">' + "\n"
+		@returnAd = @returnAd + "new CityGrid.Ads('sidebar_ad_slot_" + adid + "', {" + "\n"
+		@returnAd = @returnAd + "    collection_id: 'web-002-300x250'," + "\n"
+		@returnAd = @returnAd + "    publisher: '" + publisher + "'," + "\n"
+		@returnAd = @returnAd + "    what:'" + what + "'," + "\n"
+		@returnAd = @returnAd + "    where: '" + where + "'," + "\n"
+		@returnAd = @returnAd + "    width: 300," + "\n"
+		@returnAd = @returnAd + "    height: 250" + "\n"
+		@returnAd = @returnAd + "  })" + "\n"
+		@returnAd = @returnAd + "</script>" + "\n"
+
+		return @returnAd 
+	
+	end
+		
+	def displaywebad630x100(adid,publisher,what,where)
+
+		@returnAd = '<div id="sidebar_ad_slot_' + adid + '"></div>' + "\n"
+		@returnAd = @returnAd + '<script type="text/javascript">' + "\n"
+		@returnAd = @returnAd + "new CityGrid.Ads('sidebar_ad_slot_" + adid + "', {" + "\n"
+		@returnAd = @returnAd + "    collection_id: 'web-001-630x100'," + "\n"
+		@returnAd = @returnAd + "    publisher: '" + publisher + "'," + "\n"
+		@returnAd = @returnAd + "    what:'" + what + "'," + "\n"
+		@returnAd = @returnAd + "    where: '" + where + "'," + "\n"
+		@returnAd = @returnAd + "    width: 630," + "\n"
+		@returnAd = @returnAd + "    height: 100" + "\n"
+		@returnAd = @returnAd + "  })" + "\n"
+		@returnAd = @returnAd + "</script>" + "\n"
+
+		return @returnAd
+
+	end
+
+end
+%>

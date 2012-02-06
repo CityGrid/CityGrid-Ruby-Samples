@@ -1,0 +1,122 @@
+<%
+class CityGridPlaces
+  	 
+	def initialize()
+
+	end
+
+	def srchplaceswhere(what,type,where,page,rpp,sort,rformat,placement,hasoffers,histograms,i,publishercode)
+		
+		@rooturl = "http://api.citygridmedia.com/content/places/v2/search/where?"
+
+		@url = 'publisher=' + publishercode
+		@url = @url + '&sort=' + sort
+		@url = @url + '&page=' + page
+		@url = @url + '&rpp=' + rpp
+
+	   	if what.length > 0 then
+	   		@url = @url + '&what=' + what	
+		end
+	   	if type.length > 0 then
+	   		@url = @url + '&type=' + type	
+		end
+	   	if where.length > 0 then
+	   		@url = @url + '&where=' + where	
+		end
+
+	   	if placement.length > 0 then
+	   		@url = @url + '&placement=' + placement	
+		end
+	   	if hasoffers.length > 0 then
+	   		@url = @url + '&has_offers=' + hasoffers	
+		end
+	   	if histograms.length > 0 then
+	   		@url = @url + '&histograms=' + histograms	
+		end
+
+	   	if i.length > 0 then
+	   		@url = @url + '&i=' + i	
+		end	   	
+	   	
+		@url = @url + '&format=' + rformat
+			
+		begin
+
+		  	@url = URI.escape(@url)
+			@url = @rooturl + @url
+
+		  	@uri = URI.parse(@url)
+
+			request = Net::HTTP::Get.new(@uri.path+'?'+@uri.query)
+			
+			http = Net::HTTP.new(@uri.host,@uri.port)
+			
+			response = http.start {|http| http.request(request) } 
+			
+			@response = response.body
+
+		rescue Exception => ex
+		  	@response = "An error of type #{ex.class} happened, message is #{ex.message}"
+		end
+
+		return @response
+	end
+
+	def placesdetail(id,id_type,phone,customer_only,all_results,review_count,placement,format,callback,i,publishercode)
+		
+		@client_ip = ENV['REMOTE_ADDR']
+
+		@rooturl = "http://api.citygridmedia.com/content/places/v2/detail?"
+
+		@url = 'publisher=' + publishercode
+		@url = @url + '&id=' + id
+		@url = @url + '&id_type=' + id_type
+		@url = @url + '&client_ip=' + @client_ip
+
+	   	if phone.length > 0 then
+	   		@url = @url + '&phone=' + phone	
+		end
+	   	if customer_only.length > 0 then
+	   		@url = @url + '&customer_only=' + customer_only	
+		end
+	   	if all_results.length > 0 then
+	   		@url = @url + '&all_results=' + all_results	
+		end
+
+	   	if review_count.length > 0 then
+	   		@url = @url + '&review_count=' + review_count	
+		end
+	   	if placement.length > 0 then
+	   		@url = @url + '&placement=' + placement	
+		end
+	   	if format.length > 0 then
+	   		@url = @url + '&format=' + format	
+		end
+	   	if callback.length > 0 then
+	   		@url = @url + '&callback=' + callback	
+		end
+
+	   	if i.length > 0 then
+	   		@url = @url + '&i=' + i	
+		end	   	
+
+	  	@url = URI.escape(@url)
+		@url = @rooturl + @url
+
+	  	@uri = URI.parse(@url)
+
+		request = Net::HTTP::Get.new(@uri.path+'?'+@uri.query)
+		
+		http = Net::HTTP.new(@uri.host,@uri.port)
+		
+		response = http.start {|http| http.request(request) } 
+		
+		@response = response.body
+
+		return @response
+
+	end
+
+end
+
+%>
